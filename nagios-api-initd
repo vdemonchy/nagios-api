@@ -18,7 +18,7 @@ RETVAL=0
 LOGFILE="/var/log/nagios/nagios-api.log"
 
 NAG_API_BIN=/usr/bin/nagios-api
-NAG_API_PORT=6315
+NAG_API_PORT=8080
 NAG_API_PID=/var/run/$PROG.pid
 
 NAGIOS_STATUS_FILE=/var/log/nagios/status.dat
@@ -50,13 +50,17 @@ case "$1" in
   stop)
 	stop
 	;;
+  status)
+  status -p ${NAG_API_PID} ${NAG_API_BIN}
+  RETVAL=$?
+  ;;
   restart)
 	stop
 	start
 	RETVAL=$?
 	;;
   *)
-	echo $"Usage: $0 {start|stop|restart}"
+	echo $"Usage: $0 {start|stop|status|restart}"
 	RETVAL=1
 esac
 
