@@ -18,6 +18,7 @@ RETVAL=0
 LOGFILE="/var/log/nagios/nagios-api.log"
 
 NAG_API_BIN=/usr/bin/nagios-api
+NAG_API_BINDADDR="localhost"
 NAG_API_PORT=8080
 NAG_API_PID=/var/run/$PROG.pid
 
@@ -27,7 +28,7 @@ NAGIOS_LOG_FILE=/var/log/nagios/nagios.log
 
 start() {
   echo -n "Starting $DESC ($PROG): "
-  daemon $NAG_API_BIN -p $NAG_API_PORT -s $NAGIOS_STATUS_FILE -c $NAGIOS_COMMAND_FILE -l $NAGIOS_LOG_FILE > $LOGFILE 2>&1 &
+  daemon $NAG_API_BIN -b $NAG_API_BINDADDR -p $NAG_API_PORT -s $NAGIOS_STATUS_FILE -c $NAGIOS_COMMAND_FILE -l $NAGIOS_LOG_FILE > $LOGFILE 2>&1 &
   
   echo
   RETVAL=$?
