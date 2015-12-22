@@ -23,7 +23,7 @@ NAG_API_PORT=8080
 NAG_API_PID=/var/run/$PROG.pid
 
 NAGIOS_STATUS_FILE=/var/log/nagios/status.dat
-NAGIOS_COMMAND_FILE=/var/spool/nagios/cmd/nagios.cmd
+NAGIOS_COMMAND_FILE=/var/log/nagios/rw/nagios.cmd
 NAGIOS_LOG_FILE=/var/log/nagios/nagios.log
 
 start() {
