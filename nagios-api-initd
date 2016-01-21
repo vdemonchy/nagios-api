@@ -27,11 +27,18 @@ NAGIOS_COMMAND_FILE=/var/log/nagios/rw/nagios.cmd
 NAGIOS_LOG_FILE=/var/log/nagios/nagios.log
 
 start() {
-  echo -n "Starting $DESC ($PROG): "
-  daemon $NAG_API_BIN -b $NAG_API_BINDADDR -p $NAG_API_PORT -s $NAGIOS_STATUS_FILE -c $NAGIOS_COMMAND_FILE -l $NAGIOS_LOG_FILE > $LOGFILE 2>&1 &
-  
+  # Start nagios-api only if nagios is running
+  if [ -n "`pidofproc nagios`" ]; then
+    echo -n "Starting $DESC ($PROG): "
+    daemon $NAG_API_BIN -b $NAG_API_BINDADDR -p $NAG_API_PORT -s $NAGIOS_STATUS_FILE -c $NAGIOS_COMMAND_FILE -l $NAGIOS_LOG_FILE > $LOGFILE 2>&1 &
+    RETVAL=$?
+  else
+    echo -n "Nagios must be started first"
+    echo_failure
+    RETVAL=7
+  fi
+
   echo
-  RETVAL=$?
   return $RETVAL
 }
 
@@ -52,9 +59,9 @@ case "$1" in
 	stop
 	;;
   status)
-  status -p ${NAG_API_PID} ${NAG_API_BIN}
-  RETVAL=$?
-  ;;
+	status -p ${NAG_API_PID} ${NAG_API_BIN}
+	RETVAL=$?
+	;;
   restart)
 	stop
 	start
